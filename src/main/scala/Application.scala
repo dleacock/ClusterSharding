@@ -3,10 +3,10 @@ import akka.actor.typed.ActorSystem
 import com.typesafe.config.ConfigFactory
 import thermostat.IotThermostat.Command
 
+import scala.collection.JavaConverters._
 import scala.collection.mutable
-import scala.jdk.CollectionConverters.ListHasAsScala
 
-object Main {
+object Application {
 
   def main(args: Array[String]): Unit = {
     val seedNodePorts: mutable.Seq[Int] = ConfigFactory

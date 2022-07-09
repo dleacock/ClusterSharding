@@ -1,5 +1,5 @@
 lazy val akkaHttpVersion = "10.2.8"
-lazy val akkaVersion = "2.6.14"
+lazy val akkaVersion = "2.6.19"
 lazy val circeVersion = "0.14.1"
 lazy val AkkaManagementVersion = "1.1.3"
 
@@ -16,6 +16,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-persistence-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-cluster-sharding-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-serialization-jackson" % akkaVersion,
+  "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion,
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.2",
   "com.lightbend.akka.management" %% "akka-management-cluster-bootstrap" % AkkaManagementVersion,
   "com.typesafe.akka" %% "akka-discovery" % akkaVersion,
   "com.datastax.oss" % "java-driver-core" % "4.13.0", // See https://github.com/akka/alpakka/issues/2556
