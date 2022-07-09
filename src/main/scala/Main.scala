@@ -1,6 +1,7 @@
 import akka.actor.AddressFromURIString
 import akka.actor.typed.ActorSystem
 import com.typesafe.config.ConfigFactory
+import thermostat.IotThermostat.Command
 
 import scala.collection.mutable
 import scala.jdk.CollectionConverters.ListHasAsScala
@@ -28,7 +29,7 @@ object Main {
        akka.remote.artery.canonical.port = $port
         """)
         .withFallback(ConfigFactory.load())
-      ActorSystem[Nothing](IotThermostatService(httpPort), "IotThermostatService", config)
+      ActorSystem[Command](IotThermostatService(httpPort), "IotThermostatService", config)
     }
   }
 }
