@@ -1,11 +1,25 @@
-import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
-import akka.actor.typed.{ActorRef, Behavior, PostStop}
-import akka.cluster.sharding.typed.scaladsl.EntityTypeKey
+package thermostat
+
+import akka.actor.typed.scaladsl.{ ActorContext, Behaviors }
+import akka.actor.typed.{ ActorRef, ActorSystem, Behavior, PostStop }
+import akka.cluster.sharding.typed.scaladsl.{
+  ClusterSharding,
+  Entity,
+  EntityTypeKey
+}
 
 object IotThermostat {
 
   // TODO move this elsewhere and make this class not need to know about cluster sharding
   val TypeKey: EntityTypeKey[Command] = EntityTypeKey[Command]("IotThermostat")
+
+  def initSharding(system: ActorSystem[_]): Unit =
+    ClusterSharding(system).init(Entity(TypeKey) { entityContext =>
+      IotThermostat(
+        DeviceId(entityContext.entityId),
+        Temperature("999")
+      ) // TODO come up with better value
+    })
 
   sealed trait Command extends CborSerializable
   final case class RecordTemperature(
