@@ -1,3 +1,10 @@
+### Simple ClusterSharding project
+
+While working on a different project I realized my ClusterSharding knowledge was lacking a few key elements so create this spin-off to gain a better understanding
+of how to shard actors as well as create an http endpoint to access their state. This is based off the akka-samples project but I whittled it down to the bare bones in hopes it may help others.
+
+Please feel free to make improvements if needed. Note that this is just Cluster Sharding and does not involve persistence so actor state is lost eventually once all nodes are down.
+
 #### A three node cluster in separate JVMs
 
 In the first terminal window, start the first seed node with the following command:
