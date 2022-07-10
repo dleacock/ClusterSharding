@@ -4,12 +4,11 @@ import com.typesafe.config.ConfigFactory
 import thermostat.IotThermostat.Command
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable
 
 object Application {
 
   def main(args: Array[String]): Unit = {
-    val seedNodePorts: mutable.Seq[Int] = ConfigFactory
+    val seedNodePorts = ConfigFactory
       .load()
       .getStringList("akka.cluster.seed-nodes")
       .asScala
@@ -17,7 +16,7 @@ object Application {
         s.port
       }
 
-    val ports: collection.Seq[Int] = args.headOption match {
+    val ports = args.headOption match {
       case Some(port) => Seq(port.toInt)
       case None       => seedNodePorts ++ Seq(0)
     }
@@ -29,7 +28,11 @@ object Application {
        akka.remote.artery.canonical.port = $port
         """)
         .withFallback(ConfigFactory.load())
-      ActorSystem[Command](IotThermostatService(httpPort), "IotThermostatService", config)
+      ActorSystem[Command](
+        IotThermostatService(httpPort),
+        "IotThermostatService",
+        config
+      )
     }
   }
 }

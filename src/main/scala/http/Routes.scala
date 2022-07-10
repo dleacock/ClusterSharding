@@ -5,9 +5,9 @@ import akka.cluster.sharding.typed.scaladsl.ClusterSharding
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.util.Timeout
-import thermostat.IotThermostat._
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
 import io.circe.generic.auto._
+import thermostat.IotThermostat._
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -49,7 +49,8 @@ class Routes(system: ActorSystem[_]) {
       path(Segment) { id =>
         get {
           onSuccess(queryTemperature(DeviceId(id))) {
-            case TemperatureQueryResult(value) => complete(value.value)
+            case TemperatureQueryResult(temperature) =>
+              complete(temperature.value)
           }
         } ~
           put {

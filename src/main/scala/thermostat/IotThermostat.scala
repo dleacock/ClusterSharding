@@ -26,7 +26,7 @@ object IotThermostat {
     temperature: Temperature,
     replyTo: ActorRef[TemperatureRecorded])
       extends Command
-  final case class TemperatureRecorded(deviceId: DeviceId)
+  final case class TemperatureRecorded(deviceId: DeviceId) // fix?
 
   final case class QueryTemperature(replyTo: ActorRef[TemperatureQueryResult])
       extends Command
@@ -45,7 +45,9 @@ object IotThermostat {
     Behaviors
       .receiveMessage[Command] {
         case RecordTemperature(temperature, replyTo) => {
-          log.info(s"IoTTemperature Device $deviceId at $temperature degrees")
+          log.info(
+            s"Iot Temperature Device ${deviceId.value} at ${temperature.value} degrees"
+          )
           replyTo ! TemperatureRecorded(deviceId)
           run(context, deviceId, temperature)
         }
@@ -54,7 +56,7 @@ object IotThermostat {
           run(context, deviceId, temperature)
       }
       .receiveSignal { case (_, PostStop) =>
-        log.info(s"Stopping, losing temperature for device $deviceId")
+        log.info(s"Stopping, losing temperature for device ${deviceId.value}")
         Behaviors.same
       }
   }
