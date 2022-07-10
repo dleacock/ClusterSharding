@@ -23,9 +23,7 @@ class Routes(system: ActorSystem[_]) {
       .toMillis
       .millis
 
-  final case class RecordTemperatureRequest(
-    deviceId: String,
-    temperature: String)
+  final case class RecordTemperatureRequest(temperature: String)
 
   private def recordTemperature(
     deviceId: DeviceId,
@@ -50,14 +48,14 @@ class Routes(system: ActorSystem[_]) {
         get {
           onSuccess(queryTemperature(DeviceId(id))) {
             case TemperatureQueryResult(temperature) =>
-              complete(temperature.value)
+              complete(s"Thermostat $id is at ${temperature.value}")
           }
         } ~
           put {
             entity(as[RecordTemperatureRequest]) { request =>
               onSuccess(
                 recordTemperature(
-                  DeviceId(request.deviceId),
+                  DeviceId(id),
                   Temperature(request.temperature)
                 )
               ) { performed =>

@@ -10,15 +10,14 @@ import akka.cluster.sharding.typed.scaladsl.{
 
 object IotThermostat {
 
-  // TODO move this elsewhere and make this class not need to know about cluster sharding
   val TypeKey: EntityTypeKey[Command] = EntityTypeKey[Command]("IotThermostat")
 
   def initSharding(system: ActorSystem[_]): Unit =
     ClusterSharding(system).init(Entity(TypeKey) { entityContext =>
       IotThermostat(
         DeviceId(entityContext.entityId),
-        Temperature("999")
-      ) // TODO come up with better value
+        Temperature("Uninitialized")
+      )
     })
 
   sealed trait Command extends CborSerializable
@@ -26,7 +25,7 @@ object IotThermostat {
     temperature: Temperature,
     replyTo: ActorRef[TemperatureRecorded])
       extends Command
-  final case class TemperatureRecorded(deviceId: DeviceId) // fix?
+  final case class TemperatureRecorded(deviceId: DeviceId) extends CborSerializable
 
   final case class QueryTemperature(replyTo: ActorRef[TemperatureQueryResult])
       extends Command
