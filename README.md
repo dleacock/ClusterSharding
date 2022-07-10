@@ -29,3 +29,22 @@ Now you don't need to specify the port number, 0 means that it will use a random
 Look at the log output in the different terminal windows.
 
 Start even more nodes in the same way, if you like.
+
+#### API
+
+With the cluster running you can interact with the HTTP endpoint using raw HTTP, for example with `curl`.
+
+Record data for thermostat 1234:
+
+```
+curl -XPOST http://localhost:12553/thermostat/1234 -H "Content-Type: application/json" --data '{"temperature": "21.0"}'
+```
+
+Query temperature for thermostat 1234:
+
+```
+curl "http://localhost:12553/thermostat/1234"
+```
+
+You can also change the port to any of the other nodes and run the same query and you will get a result in return. Even if the node isn't responsible for handling that particular
+thermostat Akka will be able to route the message to the right node.
